@@ -1,8 +1,8 @@
 import PackageCard from "./PackageCard";
-import img1 from "../../assets/images/pack1.jpeg";
+import img1 from "../../assets/images/pack1.jpg";
 import img2 from "../../assets/images/de.jpg";
-import img3 from "../../assets/images/pack2.jpeg";
-import img4 from "../../assets/images/pack3.jpeg";
+import img3 from "../../assets/images/pack2.jpg";
+import img4 from "../../assets/images/pack3.jpg";
 
 
 export default function PackagesSection() {
