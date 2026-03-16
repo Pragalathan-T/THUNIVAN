@@ -17,7 +17,7 @@ const Home = () => {
         {/* Hero Content */}
         <div className="relative z-10 text-center px-4 max-w-4xl">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-            Explore Coimbatore with
+            Explore Kanyakumari with
             <span className="block text-emerald-300">
               Verified Local Guides
             </span>

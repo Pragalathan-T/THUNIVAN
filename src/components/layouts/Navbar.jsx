@@ -54,7 +54,7 @@ const Navbar = () => {
 
             <div className="hidden md:flex items-center gap-1 text-gray-600 text-sm">
               <MapPin size={16} />
-              <span>Coimbatore</span>
+              <span>Kanyakumari</span>
             </div>
 
             <button className="bg-emerald-600 text-white px-5 py-2 rounded-full text-sm font-medium">
