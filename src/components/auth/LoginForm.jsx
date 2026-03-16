@@ -26,7 +26,14 @@ export default function LoginForm({ switchToRegister, switchToSelection, onClose
 
       const res = await loginUser(formData);
 
-      const user = res.data;
+      const responseUser = res.data || {};
+      const user = {
+        id: responseUser.id,
+        username: responseUser.username,
+        email: responseUser.email,
+        role: responseUser.role,
+        token: responseUser.token,
+      };
 
       toast.success("Login successful 🎉");
 
@@ -37,7 +44,9 @@ export default function LoginForm({ switchToRegister, switchToSelection, onClose
         onClose();
 
         if (user.role === "ADMIN") {
-          navigate("/admin");
+          navigate("/admin/dashboard");
+        } else if (user.role === "GUIDE") {
+          navigate("/guide/dashboard");
         } else {
           navigate("/");
         }
