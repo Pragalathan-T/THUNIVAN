@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MapPin, User, Menu, X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion as Motion } from "framer-motion";
 import toast from "react-hot-toast";
 import AuthModal from "../auth/AuthModal";
 import { getCurrentUser, logoutUser } from "../../api/authApi";
@@ -175,13 +175,13 @@ const Navbar = () => {
 
       <AnimatePresence>
         {showGuideModal && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center"
           >
-            <motion.div
+            <Motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -286,29 +286,73 @@ const Navbar = () => {
                     />
                   </div>
 
+                  {/* GUIDER PHOTO */}
                   <div className="col-span-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">Documents</label>
-                    <input
-                      type="file"
-                      name="documents"
-                      required
-                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                      multiple
-                      onChange={(e) => setDocumentFiles(Array.from(e.target.files || []))}
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-800"
-                    />
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                      Guider Photo
+                    </label>
+                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition">
+                      {guiderPhotoFile ? (
+                        <img
+                          src={URL.createObjectURL(guiderPhotoFile)}
+                          alt="preview"
+                          className="h-full w-full object-cover rounded-xl"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-1 text-gray-400">
+                          <span className="text-2xl">🖼️</span>
+                          <span className="text-xs">Click to upload photo</span>
+                          <span className="text-xs text-gray-300">JPG, PNG supported</span>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => setGuiderPhotoFile(e.target.files?.[0] || null)}
+                      />
+                    </label>
                   </div>
 
+                  {/* DOCUMENTS */}
                   <div className="col-span-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">Guider Photo</label>
-                    <input
-                      type="file"
-                      name="guiderPhoto"
-                      required
-                      accept="image/*"
-                      onChange={(e) => setGuiderPhotoFile(e.target.files?.[0] || null)}
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm text-gray-800"
-                    />
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                      Documents <span className="text-gray-400 normal-case font-normal">(min. 2 required)</span>
+                    </label>
+                    <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition">
+                      <div className="flex flex-col items-center gap-1 text-gray-400">
+                        <span className="text-xl">📎</span>
+                        <span className="text-xs">Click to add documents</span>
+                        <span className="text-xs text-gray-300">PDF, DOC, DOCX supported</span>
+                      </div>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        multiple
+                        className="hidden"
+                        onChange={(e) => setDocumentFiles((prev) => [...prev, ...Array.from(e.target.files || [])])}
+                      />
+                    </label>
+
+                    {documentFiles.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {documentFiles.map((file, i) => (
+                          <div key={i} className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs rounded-lg px-3 py-1.5">
+                            <span>📄</span>
+                            <span className="max-w-[140px] truncate">{file.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => setDocumentFiles((prev) => prev.filter((_, idx) => idx !== i))}
+                              className="text-emerald-400 hover:text-red-500 font-bold ml-1"
+                            >✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <p className={`text-xs mt-2 ${documentFiles.length < 2 ? "text-red-400" : "text-emerald-500"}`}>
+                      {documentFiles.length} file(s) selected — minimum 2 required
+                    </p>
                   </div>
                 </div>
 
@@ -330,8 +374,8 @@ const Navbar = () => {
                   </button>
                 </div>
               </form>
-            </motion.div>
-          </motion.div>
+            </Motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
 
