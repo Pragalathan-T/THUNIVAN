@@ -1,31 +1,28 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { MapPin, User, Menu } from "lucide-react";
 import toast from "react-hot-toast";
 import AuthModal from "../auth/AuthModal";
+import GuideApplicationModal from "../guide/GuideApplicationModal";
 import { getCurrentUser, logoutUser } from "../../api/authApi";
 import { useNavigate } from "react-router-dom";
 import BecomeAGuideModal from "../guide/BecomeAGuideModal";
 
-const Navbar = () => {
+export default function Navbar() {
 
   const [showAuth, setShowAuth] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
 
   const navigate = useNavigate();
-
   const user = getCurrentUser();
 
   const handleLogout = () => {
-
     logoutUser();
-
     navigate("/");
-
     window.location.reload();
-
   };
 
   const handleBecomeGuideClick = () => {
+
     if (!user) {
       toast("Please register / login first", { icon: "⚠️" });
       setShowAuth(true);
@@ -41,8 +38,7 @@ const Navbar = () => {
 
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-          {/* LEFT - Logo */}
-
+          {/* LOGO */}
           <div className="flex items-center gap-3 cursor-pointer">
 
             <div className="bg-emerald-600 p-2 rounded-xl">
@@ -53,7 +49,6 @@ const Navbar = () => {
               <h1 className="text-lg font-bold text-gray-800">
                 THUNAIVAN
               </h1>
-
               <p className="text-xs text-gray-500">
                 Smart Tourism
               </p>
@@ -62,12 +57,11 @@ const Navbar = () => {
           </div>
 
           {/* RIGHT */}
-
           <div className="flex items-center gap-4">
 
             <div className="hidden md:flex items-center gap-1 text-gray-600 text-sm">
               <MapPin size={16} />
-              <span>Coimbatore</span>
+              <span>Kanyakumari</span>
             </div>
 
             <button
@@ -108,13 +102,10 @@ const Navbar = () => {
         <AuthModal onClose={() => setShowAuth(false)} />
       )}
 
-      <BecomeAGuideModal
+      <GuideApplicationModal
         show={showGuideModal}
         onClose={() => setShowGuideModal(false)}
       />
-
     </>
   );
-};
-
-export default Navbar;
+}
