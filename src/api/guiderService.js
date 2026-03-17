@@ -13,6 +13,11 @@ export const createGuider = async ({ name, email, password, phoneNumber, address
   params.append("address", address);
   params.append("location", location);
   params.append("localGuideDetails", localGuideDetails);
+  if (documents && documents.length > 0) {
+    documents.forEach((file) => {
+      params.append("documents", file.name);
+    });
+  }
 
   const formData = new FormData();
   if (documents && documents.length > 0) {
@@ -22,8 +27,8 @@ export const createGuider = async ({ name, email, password, phoneNumber, address
     formData.append("guiderPhoto", guiderPhoto);
   }
 
-  return axios.post(
-    `https://sakthiveltouristbackend.onrender.com/api/guiders/create?${params.toString()}`,
+  return guiderApi.post(
+    `/api/guiders/create?${params.toString()}`,
     formData
   );
 };

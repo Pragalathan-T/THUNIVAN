@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import AppLayout from "./AppLayout";
 import AdminDashboard from "../components/admin/AdminDashboard";
-import GuideDashboard from "../pages/guide/GuideDashboard";
+import GuideDashboard from "../pages/guide/GuideDashboard.jsx";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function AppRoutes() {

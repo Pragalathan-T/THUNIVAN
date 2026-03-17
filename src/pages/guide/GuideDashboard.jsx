@@ -136,7 +136,7 @@ export default function GuideDashboard() {
         .filter(Boolean);
 
       const payload = {
-        guiderId,
+        guiderId: Number(guiderId),
         packageTitle: formData.packageTitle,
         description: formData.description,
         location: formData.location,
@@ -203,7 +203,7 @@ export default function GuideDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {packages.map((pkg) => {
               const packageId = pkg.packageId ?? pkg.id;
-              const packageName = pkg.name ?? pkg.title ?? "Untitled Package";
+              const packageName = pkg.packageTitle ?? pkg.name ?? pkg.title ?? "Untitled Package";
               const status = (pkg.status || "PENDING").toUpperCase();
 
               return (

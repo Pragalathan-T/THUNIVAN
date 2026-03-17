@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
+import axios from "../../api/axios";
 
 export default function LoginForm({ switchToRegister, switchToSelection, onClose }) {
 
@@ -24,28 +25,45 @@ export default function LoginForm({ switchToRegister, switchToSelection, onClose
 
     try {
 
-      const res = await loginUser(formData);
+      const response = await loginUser(formData);
+      const { id, username, email, role, token } = response.data;
+      console.log("RAW role from backend:", role);
+      const normalizedRole = String(role || "")
+        .toUpperCase()
+        .replace(/^ROLE_/, "")
+        .trim()
+        .replace("GUIDER", "GUIDE");
+      let resolvedRole = normalizedRole;
 
-      const responseUser = res.data || {};
-      const user = {
-        id: responseUser.id,
-        username: responseUser.username,
-        email: responseUser.email,
-        role: responseUser.role,
-        token: responseUser.token,
-      };
+      if (normalizedRole === "USER") {
+        try {
+          const guidersResponse = await axios.get("/api/guiders");
+          const guiders = Array.isArray(guidersResponse.data) ? guidersResponse.data : [];
+          const isVerifiedGuide = guiders.some(
+            (guider) =>
+              String(guider?.email || "").toLowerCase() === String(email || "").toLowerCase() &&
+              String(guider?.status || "").toUpperCase() === "VERIFIED"
+          );
+
+          if (isVerifiedGuide) {
+            resolvedRole = "GUIDE";
+          }
+        } catch {
+          resolvedRole = "USER";
+        }
+      }
 
       toast.success("Login successful 🎉");
 
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify({ id, username, email, role: resolvedRole, token }));
 
       setTimeout(() => {
 
         onClose();
 
-        if (user.role === "ADMIN") {
+        if (resolvedRole === "ADMIN") {
           navigate("/admin/dashboard");
-        } else if (user.role === "GUIDE") {
+        } else if (resolvedRole === "GUIDE") {
           navigate("/guide/dashboard");
         } else {
           navigate("/");

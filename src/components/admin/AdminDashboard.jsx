@@ -140,6 +140,7 @@ export default function AdminDashboard() {
                 <th className="p-4">Email</th>
                 <th className="p-4">Phone</th>
                 <th className="p-4">Location</th>
+                <th className="p-4">Documents</th>
                 <th className="p-4">Status</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
@@ -161,6 +162,19 @@ export default function AdminDashboard() {
                     <td className="p-4 text-gray-600">{guide.email}</td>
                     <td className="p-4 text-gray-600">{guide.phoneNumber}</td>
                     <td className="p-4 text-gray-600">{guide.location}</td>
+                    <td className="p-4 text-gray-600">
+                      {guide.documents && guide.documents.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {guide.documents.map((doc, i) => (
+                            <span key={i} className="bg-gray-100 text-gray-600 border border-gray-200 rounded-lg px-2 py-1 text-xs">
+                              {doc}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-500">No documents</span>
+                      )}
+                    </td>
                     <td className="p-4">
                       <span className={getStatusBadgeClass(status)}>
                         {status}
